@@ -1,0 +1,6 @@
+# Ignore the virtual environment folder
+.venv/
+venv/
+
+# Ignore specific image files
+*.png
