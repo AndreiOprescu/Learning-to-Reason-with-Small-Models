@@ -12,6 +12,7 @@ Below are the embeddings of some words after PCA was applied for visualization p
 
 I also decided to prove the 'king - man + woman => queen' analogy. By doing this calculation using the vector embeddings of the words, these are the top 5 closest neighbors:
 Additionally, I also looked at the closest neighbors of the word 'apple':
+
 ![Queen Analogy](Closest_words.png)
 
 ## Running the project
