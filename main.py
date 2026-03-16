@@ -26,20 +26,42 @@ def main():
     final_embeddings = model.W_in + model.W_out
     print("\nTraining complete. Embedding matrix shape:", final_embeddings.shape)
 
-    plt.plot(losses)
-    plt.title("Training Loss")
-    plt.xlabel("Step")
-    plt.ylabel("Loss")
-    plt.savefig("loss_curve.png")
-    plt.show()
+    # Plot losses
+    plot_loss(losses)
 
+    # Prove the king - man + woman = queen analogy
     analogy(final_embeddings, dataset)
 
     test_words = ["king", "queen", "man", "woman", "apple", "orange", "dog", "cat"]
     plot_embeddings_pca(test_words, final_embeddings, dataset)
 
+    print("\nMost similar words to 'apple':")
     get_similar_words("apple", final_embeddings, dataset)
 
+
+def plot_loss(losses):
+    steps = np.arange(len(losses))
+
+    # Smooth the raw losses with a rolling average so the plot is readable
+    window = 200
+    smoothed = np.convolve(losses, np.ones(window) / window, mode='valid')
+    smoothed_steps = steps[:len(smoothed)]
+
+    # Fit a degree-4 polynomial to the smoothed curve
+    coeffs = np.polyfit(smoothed_steps, smoothed, deg=4)
+    fit_line = np.polyval(coeffs, smoothed_steps)
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(steps, losses, alpha=0.2, color='steelblue', label='raw loss')
+    plt.plot(smoothed_steps, smoothed, color='steelblue', label='smoothed')
+    plt.plot(smoothed_steps, fit_line, color='red', linewidth=2, label='best fit')
+    plt.title("Training Loss")
+    plt.xlabel("Step")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.4)
+    plt.savefig("loss_curve.png")
+    plt.show()
 
 def analogy(embeddings, dataset):
     """Classic king - man + woman analogy test."""
